@@ -1,6 +1,6 @@
 # Can We Tune Together
 
-Can we tune multiple language models together? There are many pre-trained transformer language models available on [huggingface model hub](https://huggingface.co/models). The current hype for sentence-level tasks is to pick one language model (i.e BERT, ELECTRA, deBERTa) and fine-tune it for the task at hand. Each LM has something different: either a different pretraining objective, a different corpus used for pretaining, or some other twists in the transformer architecture. When evaluating unalike models on the [GLUE benchmark](https://gluebenchmark.com/), they also score differently.
+Can we tune multiple language models together? There are many pre-trained transformer language models available on [HuggingFace model hub](https://huggingface.co/models). The current hype for sentence-level tasks is to pick one language model (i.e BERT, ELECTRA, deBERTa) and fine-tune it for the task at hand. Each LM has something different: either a different pretraining objective, a different corpus used for pretaining, or some other twists in the transformer architecture. When evaluating unalike models on the [GLUE benchmark](https://gluebenchmark.com/), they also score differently.
 
 I couldn't find any works that combine multiple LMs and tune them together — so I'm running some experiments here! 🤷‍♂️. 
 
@@ -45,7 +45,7 @@ trainer.train(learning_rate=2e-5,
 - Electra base scores around 67.7 (Matthews correlation coefficient) for CoLA dev set. You can look at the scores provided by the authors here: [expected electra results](https://github.com/google-research/electra).
 - Roberta base scores around 63.6 [expected roberta results](https://github.com/pytorch/fairseq/tree/master/examples/roberta).
 - SpanBERT scores around 60.1.
-- If you prefer testing it with smaller models, I'd suggest [electra-small](https://huggingface.co/prajjwal1/bert-medium) (CoLA dev score: 57.0) and [bert-medium]() (CoLA dev score: 38.0).
+- If you prefer testing it with smaller models, I'd suggest [electra-small](https://huggingface.co/prajjwal1/bert-medium) (CoLA dev score: 57.0) and [bert-medium](https://huggingface.co/google/electra-small-discriminator) (CoLA dev score: 38.0).
 
 # Combining Language Models
 
