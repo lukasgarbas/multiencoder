@@ -1,6 +1,6 @@
 # Can We Tune Together
 
-Can we tune multiple language models together? There are many pre-trained transformer language models available in [huggingface model hub](https://huggingface.co/models). The current hype for sentence-level tasks is to pick one language model (i.e BERT, ELECTRA, deBERTa) and fine-tune it for the task at hand. Each LM has something different: either a different pretraining objective, a different corpus used for pretaining, or some other twists in the transformer architecture. When evaluating unalike models on the [GLUE benchmark](https://gluebenchmark.com/), they also score differently.
+Can we tune multiple language models together? There are many pre-trained transformer language models available on [huggingface model hub](https://huggingface.co/models). The current hype for sentence-level tasks is to pick one language model (i.e BERT, ELECTRA, deBERTa) and fine-tune it for the task at hand. Each LM has something different: either a different pretraining objective, a different corpus used for pretaining, or some other twists in the transformer architecture. When evaluating unalike models on the [GLUE benchmark](https://gluebenchmark.com/), they also score differently.
 
 I couldn't find any works that combine multiple LMs and tune them together — so I'm simply running some experiments here! 🤷‍♂️. 
 
