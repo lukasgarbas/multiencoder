@@ -8,7 +8,6 @@ The initial idea was to concatenate different CLS token representations of each 
 
 My code is very much based on [FlairNLP](https://github.com/flairNLP/flair) (shout-out to them! Look it up, it's a cool NLP framework 🙃). If combining and tuning multiple LMs together happens to work, I might open a PR later.
 
-__🔁 This is still an ongoing project...__
 
 # Tuning a single Language Model
 
@@ -140,10 +139,12 @@ This scored 69.3. I tried it only once so the score might differ after taking th
 
 ## Notes on combining different LMs and why it sometimes doesn't work
 
-In some cases the multi-encoder can score lower than the strongest LM. This mostly happens if both LMs have similar scores for the same task. Here is a 3-Step plan how to bypass that:
+In some cases the multi-encoder can score lower than the strongest LM. This mostly happens if both LMs have similar scores for the same task. Here is the 3-Step plan how to bypass that:
 
 - Step 1: Each LM has its own ideal learning rate. If the strongest LM scores higher than the complete multi-encoder, this can be due to some weaker LM overpowering others on the training data. I added an option to assign different learning rates for each LM in the multi-encoder. You can now decrease the learning rate just for the weaker LM by providing a list of learning rates to the trainer: `learning_rate=[3e-5, 1e-5]`).
 - Step 2: If you nailed down different learning rates and both LMs are fitting the training data at a similar pace, the combined representation can become very powerfull and may overfit quickly. You can then add dropout on top of the combined embedding: `MultiEncoder(language_models=lms, dropout=0.2)`.
 - Step 3: (Just skip 1 & 2 and jump here if you are impatient) Increase hidden dropout of the  weaker LM. When loading a LanguageModel, set the hidden dropout parameter: `LanguageModel('roberta-base', hidden_dropout_prob=0.4)`.
+
+__🔁 This is still an ongoing project...__
 
 
