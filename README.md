@@ -6,7 +6,7 @@ I couldn't find any works that combine multiple LMs and tune them together — s
 
 The initial idea was to concatenate different CLS token representations of each LM and let the complete model (multi-encoder) figure out how to combine them. Later on, I came across some other works ([Dynamic Meta-Embeddings](https://arxiv.org/abs/1804.07983) for Sentence Representations by Kiela et. al.) which applied attention to combine static GloVe and FastText embeddings. Even though the previous work with static/frozen embeddings does not directly translate to language models, the attention mechanism can still help us visualize the attention scores for each LM and look at what is happening inside the multi-encoder.
 
-My code is very much based on [FlairNLP](https://github.com/flairNLP/flair) (shout-out to them! Look it up, it's a cool NLP framework 🙃). If combining and tuning multiple LMs together happens to work, I might open a PR later.
+My code is very much based on [FlairNLP](https://github.com/flairNLP/flair) (shout-out to them! Look it up, it's a cool NLP framework 🙃). If combining and tuning multiple LMs together happens to work, I might create a PR later.
 
 
 # Tuning a single Language Model
@@ -45,7 +45,7 @@ trainer.train(learning_rate=2e-5,
 - Electra base scores around 67.7 (Matthews correlation coefficient) for CoLA dev set. You can look at the scores provided by the authors here: [expected electra results](https://github.com/google-research/electra).
 - Roberta base scores around 63.6 [expected roberta results](https://github.com/pytorch/fairseq/tree/master/examples/roberta).
 - SpanBERT scores around 60.1.
-- If you prefer testing it with smaller models, I'd suggest [electra-small](https://huggingface.co/prajjwal1/bert-medium) (CoLA dev score: 57.0) and [bert-medium](https://huggingface.co/google/electra-small-discriminator) (CoLA dev score: 38.0).
+- If you prefer testing it with smaller models, I'd suggest [electra-small](https://huggingface.co/google/electra-small-discriminator) (CoLA dev score: 57.0) and [bert-medium](https://huggingface.co/prajjwal1/bert-medium) (CoLA dev score: 38.0).
 
 # Combining Language Models
 
