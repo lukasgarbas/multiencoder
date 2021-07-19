@@ -75,9 +75,7 @@ class ModelTrainer:
             self.optimizer = self.optimizer(self.model.parameters(),
                                             lr=learning_rate,
                                             weight_decay=weight_decay)
-        
-        print(self.optimizer)
-        
+
         num_updates_per_epoch = math.ceil(len(self.corpus.train)/batch_size)
         num_training_steps = math.ceil(epochs * num_updates_per_epoch)
 
