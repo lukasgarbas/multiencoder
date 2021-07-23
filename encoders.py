@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoTokenizer, AutoConfig, AutoModel, PreTrainedTokenizer
+from transformers import AutoTokenizer, AutoConfig, AutoModel
 from transformers import logging
 import warnings
 
@@ -31,7 +31,7 @@ class LanguageModel(torch.nn.Module):
                     " tasks. `{pooling}` is currently not defined")
 
             # load auto tokenizer from huggingface transformers
-            self.tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(model)
+            self.tokenizer = AutoTokenizer.from_pretrained(model)
 
             # ignore warning messages: we will use models from huggingface model hub checkpoints
             # some layers won't be used (i.e. pooling layer) and this will throw warning messages 
@@ -74,7 +74,7 @@ class LanguageModel(torch.nn.Module):
             sentences = list(zip(sentences[0], sentences[1]))
 
         # Tokenize sentences and sentence pairs
-        # huggingface tokenizers alrady support batch tokenization
+        # huggingface tokenizers already support batch tokenization
         tokenized_sentences = self.tokenizer(sentences,
                                             padding=True,
                                             truncation=True,
@@ -127,7 +127,7 @@ class MultiEncoder(torch.nn.Module):
         ):
         ''' Uses multiple language models as encoders, combines last layer cls
         representations, and fine-tunes them simultaneously. Combine methods: 
-        concatination of cls tokens, dynamic meta-embedding (approach proposed by Kiela et al.
+        concatenation of cls tokens, dynamic meta-embedding (approach proposed by Kiela et al.
         Dynamic Meta-Embeddings for Improved Sentence Representations).
         Dropout can be applied on top of the combined embedding'''
 
