@@ -89,7 +89,7 @@ Looks like we can increase the score of Electra if we add Roberta and tune them 
 
 ## Looking at attention weights
 
-If you use DME as the combine method, you can embedd a few sentences from CoLA dev set and look at the attention scores for each language model:
+If you use DME as combine method, you can embedd a few sentences from CoLA dev set and look at the attention scores for each language model:
 
 ```python
 # pick a few sentences from CoLA dev set
@@ -114,7 +114,7 @@ print(attn_scores)
 
 ```
 
-Attention coefficients show how much weight does the multi-encoder assign to each cls representation when embedding a given sentence. Electra is a stronger model than roberta but roberta also adds something to the meta-embedding. We might find sentences where roberta even overpowers electra.
+Attention coefficients show how much weight does the multi-encoder assign to each cls representation when embedding a given sentence. Electra is a stronger model than roberta but roberta also adds something to the meta-embedding. We might find sentences where roberta gets more weight than electra.
 
 
 ## Combining more than two models
@@ -141,8 +141,8 @@ This scored 69.3. I tried it only once so the score might differ after taking th
 
 In some cases the multi-encoder can score lower than the strongest LM. This mostly happens if both LMs have similar scores for the same task. Here is the 3-Step plan how to bypass that:
 
-- Step 1: Each LM has its own ideal learning rate. If the strongest LM scores higher than the complete multi-encoder, this can be due to some weaker LM overpowering others on the training data. I added an option to assign different learning rates for each LM in the multi-encoder. You can now decrease the learning rate just for the weaker LM by providing a list of learning rates to the trainer: `learning_rate=[3e-5, 1e-5]`).
-- Step 2: If you nailed down different learning rates and both LMs are fitting the training data at a similar pace, the combined representation can become very powerfull and may overfit quickly. You can then add dropout on top of the combined embedding: `MultiEncoder(language_models=lms, dropout=0.2)`.
+- Step 1: Each LM has its own ideal learning rate. If the strongest LM scores higher than the complete multi-encoder, this can be due to some weaker LM overpowering others on the training data. I added an option to assign different learning rates for each LM in the multi-encoder. You can now decrease the learning rate just for the weaker LM by providing a list of learning rates to the trainer: `learning_rate=[3e-5, 1e-5]`.
+- Step 2: If you nailed down different learning rates and both LMs are fitting the training data at a similar pace, the combined representation can become very powerful and may overfit quickly. You can then add dropout on top of the combined embedding: `MultiEncoder(language_models=lms, dropout=0.2)`.
 - Step 3: (Just skip 1 & 2 and jump here if you are impatient) Increase hidden dropout of the  weaker LM. When loading a LanguageModel, set the hidden dropout parameter: `LanguageModel('roberta-base', hidden_dropout_prob=0.4)`.
 
 __🔁 This is still an ongoing project...__
