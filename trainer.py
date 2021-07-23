@@ -33,7 +33,6 @@ class ModelTrainer:
         self.main_metric = corpus.main_metric
 
         self.epoch = 0
-        self.best_model = None
         self.best_model_score: float = 0.0
 
         self.device = None
@@ -142,7 +141,7 @@ class ModelTrainer:
             # keep track of epochs for logging purposes
             self.epoch = epoch + 1
 
-            # shuffle the data at each epoch exept the first one
+            # shuffle the data at each epoch except the first one
             # shuffle is false by default
             train_batch_loader = self.corpus.create_train_dataloader(
                 batch_size=batch_size,
@@ -198,10 +197,11 @@ class ModelTrainer:
         modulo = max(1, int(number_of_batches / 10))
 
         for data, targets in train_batches:
-            # zero the gradients on the model and optimizer
+
             data = list(data)
             targets = targets.to(self.device)
 
+            # zero the gradients on the model and optimizer
             self.model.zero_grad()
             self.optimizer.zero_grad()
 
@@ -343,10 +343,12 @@ class ModelTrainer:
             )
         return LambdaLR(self.optimizer, lr_lambda, last_epoch)
 
+
 def log_line(str):
     dt = datetime.datetime.now().isoformat(" ", "seconds")
     log_string = f"{dt} {str}"
     print(log_string)
+
 
 def metrics_log(metrics):
     metrics_log = ""
