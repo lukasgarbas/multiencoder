@@ -50,7 +50,7 @@ class TextClassifier(torch.nn.Module):
             
             # Loss with similarity constrain
             cos_distance = 1 -  cos_similarity
-            multi_encoder_loss = self.loss_function(scores, true_labels) + self.constrain_factor*cos_distance
+            multi_encoder_loss = self.loss_function(scores, true_labels) + cos_distance
             return multi_encoder_loss
         
         scores = self.forward(sentences)
