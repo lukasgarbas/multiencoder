@@ -109,7 +109,7 @@ class ModelTrainer:
         log_line(f" - batch size:      {batch_size}")
         log_line(f" - training steps:  {num_training_steps}")
         log_line(f" - optimizer:       {type(self.optimizer).__name__}")
-        log_line(f" - learning Rate:   {learning_rate}")
+        log_line(f" - learning rate:   {learning_rate}")
         log_line(f" - weight decay:    {weight_decay}")
         log_line(f" - shuffle data:    {shuffle_data}")
         log_line(f" - save best model: {save_best_model}")
@@ -166,11 +166,11 @@ class ModelTrainer:
             # save model with the highest score
             current_score = metrics[self.main_metric]
             if current_score > self.best_model_score:
-                log_line("saving best model")
                 self.best_model_score = current_score
 
                 # store trained models using torch.save()
                 if save_best_model:
+                    log_line("saving best model")
                     if not os.path.isdir(base_path):
                         os.makedirs(base_path)
                     torch.save(self.model, base_path / "best-model.pt",)
@@ -217,13 +217,15 @@ class ModelTrainer:
             loss.backward()
 
             if seen_batches % modulo == 0:
-                # get current learning rate
+                
+                # display current learning rate
+                learning_rate_info = "lr - "
                 for group in self.optimizer.param_groups:
-                    self.learning_rate = group["lr"]
+                    learning_rate_info += f"{group['lr']:.0e} "
 
                 intermittent_loss = intermittent_loss / modulo
                 log_line(f"epoch {self.epoch} - iter {seen_batches}/{number_of_batches}" \
-                        f" - loss {intermittent_loss:.5f} - lr {self.learning_rate:.7f}")
+                        f" - loss {intermittent_loss:.5f} - {learning_rate_info}")
                 intermittent_loss = 0.0
 
             # do gradient clipping
@@ -297,14 +299,6 @@ class ModelTrainer:
 
         return metrics
 
-    def _create_linear_scheduler(self, num_training_steps, num_warmup_steps, last_epoch=-1):
-        def lr_lambda(current_step: int):
-            if current_step < num_warmup_steps:
-                return float(current_step) / float(max(1, num_warmup_steps))
-            return max(
-                0.0, float(num_training_steps - current_step) / float(max(1, num_training_steps - num_warmup_steps))
-            )
-        return LambdaLR(self.optimizer, lr_lambda, last_epoch)
 
     def _create_optimizer_with_multiple_learning_rates(self, learning_rates: list):
         assert self.encoder_type == 'multi-transformer', \
@@ -314,7 +308,7 @@ class ModelTrainer:
         num_encoders = self.model.encoder.num_lms
 
         assert num_encoders == len(learning_rates), \
-            "Incorrenct number of learning rates given."
+            "Incorrenct number of learning rates."
 
         parameter_groups = []
 
@@ -324,14 +318,30 @@ class ModelTrainer:
             params = {"params": encoder.parameters(), "lr": learning_rates[encoder_id]}
             parameter_groups.append(params)
 
+        # use the largest given learning rate for the decoder
         decoder_group = {
-            "params": self.model.decoder.parameters(), 
-            "lr": learning_rates[0]
+            "params": self.model.decoder.parameters(),
+            "lr": max(learning_rates)
         }
 
         parameter_groups.append(decoder_group)
 
         return self.optimizer(parameter_groups)
+
+
+    def _create_linear_scheduler(self, num_training_steps, num_warmup_steps, last_epoch=-1):
+        """
+        Linear scheduler with warmup: 
+        increase the learning rate from zero to the given lr during warmup, 
+        decrease the learning during from the given lr to zero for the rest training steps.
+        """
+        def lr_lambda(current_step: int):
+            if current_step < num_warmup_steps:
+                return float(current_step) / float(max(1, num_warmup_steps))
+            return max(
+                0.0, float(num_training_steps - current_step) / float(max(1, num_training_steps - num_warmup_steps))
+            )
+        return LambdaLR(self.optimizer, lr_lambda, last_epoch)
 
 def log_line(str):
     dt = datetime.datetime.now().isoformat(" ", "seconds")
