@@ -16,10 +16,10 @@ from task_heads import TextClassifier, TextRegressor, SequenceTagger
 
 class ModelTrainer:
     def __init__(
-        self,
-        model: Union[TextClassifier, TextRegressor, SequenceTagger],
-        corpus: Corpus,
-        optimizer: torch.optim.Optimizer = AdamW,
+            self,
+            model: Union[TextClassifier, TextRegressor, SequenceTagger],
+            corpus: Corpus,
+            optimizer: torch.optim.Optimizer = AdamW,
     ):
         self.model = model
         self.corpus = corpus
@@ -47,18 +47,18 @@ class ModelTrainer:
 
 
     def train(
-        self,
-        learning_rate: Union[float, List[float]] = 2e-5,
-        decoder_learning_rate: float = None,
-        batch_size: int = 16,
-        epochs: int = 10,
-        shuffle_data: bool = False,
-        num_workers: int = 0,
-        base_path: Union[Path, str] = None,
-        save_best_model: bool = True,
-        use_linear_scheduler: bool = False,
-        warmup_fraction: float = 0.1,
-        weight_decay: float = 0.01,
+            self,
+            learning_rate: Union[float, List[float]] = 2e-5,
+            decoder_learning_rate: float = None,
+            batch_size: int = 16,
+            epochs: int = 10,
+            shuffle_data: bool = False,
+            num_workers: int = 0,
+            base_path: Union[Path, str] = None,
+            save_best_model: bool = True,
+            use_linear_scheduler: bool = False,
+            warmup_fraction: float = 0.1,
+            weight_decay: float = 0.01,
     ):
         """
         :param learning_rate: pick a learning rate, 2e-5 is good for base models, large models need a lower lr
@@ -320,9 +320,9 @@ class ModelTrainer:
 
 
     def _create_optimizer_with_multiple_learning_rates(
-        self,
-        learning_rates: list,
-        decoder_learning_rate: float
+            self,
+            learning_rates: list,
+            decoder_learning_rate: float
     ):
         num_encoders = 1 if self.encoder_type == 'single-transformer' else self.model.encoder.num_lms
         num_learning_rates = len(learning_rates)

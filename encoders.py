@@ -14,7 +14,7 @@ class LanguageModel(torch.nn.Module):
             pooling: str = "cls",
             hidden_dropout_prob: float = 0.1,
             keep_special_tokens: bool = True,
-        ):
+    ):
         """
         Downloads any pretrained transformer-based language model from Huggingface and
         uses CLS token as sentence or sentence pair embedding
@@ -23,6 +23,7 @@ class LanguageModel(torch.nn.Module):
         :param fine_tune: switch fine-tuning on/off
         :param pooling: "cls" token, "mean" average all tokens, "word-level" for word tagging tasks
         :param hidden_dropout_prob: set hidden dropout in language model, default is 0.1 in all models
+        :param keep_special_tokens: only used for sequence labeling, set to false to remove sep and cls tokens
         """
 
         super().__init__()
@@ -225,7 +226,7 @@ class MultiEncoder(torch.nn.Module):
             use_layer_norm: bool = False,
             alternate_freezing_prob: float = 0.,
             combine_dropout: float = 0.,
-        ):
+    ):
         """
         Uses multiple language models as encoders, combines last layer cls representations
         and fine-tunes them simultaneously. Combine methods: concatenation of cls tokens,
@@ -321,9 +322,9 @@ class MultiEncoder(torch.nn.Module):
 
 
     def forward(
-        self,
-        sentences,
-        return_attn_scores=False,
+            self,
+            sentences,
+            return_attn_scores=False,
     ):
         embedding = []
 

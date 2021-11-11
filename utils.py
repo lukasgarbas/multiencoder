@@ -22,10 +22,10 @@ class Sentence:
     """
 
     def __init__(
-        self,
-        text: Union[str, List[str]],
-        true_label: Union[int, float, List[int]] = None,
-        sentence_type: str = None,
+            self,
+            text: Union[str, List[str]],
+            true_label: Union[int, float, List[int]] = None,
+            sentence_type: str = None,
     ):
         self._text = text
         self._true_label = true_label
@@ -76,8 +76,8 @@ class Sentence:
 
 class TextDataset(Dataset):
     def __init__(
-        self,
-        sentences: List[Sentence],
+            self,
+            sentences: List[Sentence],
     ):
         self.sentences = sentences
         self.targets = []
@@ -105,14 +105,14 @@ class TextDataset(Dataset):
 
 class Corpus:
     def __init__(
-        self,
-        name: str,
-        task_type: str,
-        train: TextDataset,
-        dev: TextDataset,
-        test: TextDataset = None,
-        label_map: Dict = None,
-        evaluation_metric: Union[str, List[str]] = None,
+            self,
+            name: str,
+            task_type: str,
+            train: TextDataset,
+            dev: TextDataset,
+            test: TextDataset = None,
+            label_map: Dict = None,
+            evaluation_metric: Union[str, List[str]] = None,
     ):
         # set train dev and test data
         self.train = train
@@ -252,16 +252,16 @@ class Corpus:
 
 class CSVCorpus(Corpus):
     def __init__(
-        self,
-        dataset_path: str,
-        label_column: int,
-        sentence_column: int,
-        sentence_pair_column: int = None,
-        skip_header: bool = True,
-        label_map: str = None,
-        task_type: str = 'Sentence classification',
-        dataset_name: str = 'Custom dataset',
-        evaluation_metric: str = ['accuracy', 'f1_score'],
+            self,
+            dataset_path: str,
+            label_column: int,
+            sentence_column: int,
+            sentence_pair_column: int = None,
+            skip_header: bool = True,
+            label_map: str = None,
+            task_type: str = 'Sentence classification',
+            dataset_name: str = 'Custom dataset',
+            evaluation_metric: str = ['accuracy', 'f1_score'],
     ):
         if type(dataset_path) == str:
             dataset_path = Path(dataset_path)
@@ -355,13 +355,13 @@ def unzip_file(zipped_data_path: Path, unzip_to: Path):
 
 
 def read_dataset_from_tsv(
-    file_path: Path,
-    label_column: int,
-    sentence_column: int,
-    task_type: str,
-    sentence_pair_column: int = None,
-    skip_header: bool = True,
-    label_map: Dict = None,
+        file_path: Path,
+        label_column: int,
+        sentence_column: int,
+        task_type: str,
+        sentence_pair_column: int = None,
+        skip_header: bool = True,
+        label_map: Dict = None,
     ) -> TextDataset:
 
     sentences = []
@@ -406,11 +406,11 @@ def read_dataset_from_tsv(
 
 
 def read_conll_textfile(
-    file_path: Path,
-    label_map: Dict,
-    word_position: int = 0,
-    label_position: int = 3,
-    delimiter: str = " ",
+        file_path: Path,
+        label_map: Dict,
+        word_position: int = 0,
+        label_position: int = 3,
+        delimiter: str = " ",
     ) -> TextDataset:
 
     sentences = []

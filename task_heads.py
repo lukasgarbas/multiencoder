@@ -12,13 +12,12 @@ class TextClassifier(torch.nn.Module):
     """
     Text Classification Head for any sentence-level classification tasks.
     This class uses representations from one (LanguageModel) or multiple language models (MultiEncoder) 
-    and adds additional layers to solve text classification tasks.
+    and adds additional linear layer + softmax to solve text classification tasks.
     """
     def __init__(
-        self,
-        encoder: Union[LanguageModel, MultiEncoder],
-        num_classes: int,
-        num_attn_heads: int = 1,
+            self,
+            encoder: Union[LanguageModel, MultiEncoder],
+            num_classes: int,
     ):
         super().__init__()
 
@@ -130,15 +129,12 @@ class TextRegressor(torch.nn.Module):
     """
     Text Regression Head for any sentence-level regression tasks.
     This class uses representations from one (LanguageModel) or multiple language models (MultiEncoder) 
-    and adds additional layers to solve text regression tasks.
-    The final linear layer is used as regressor, meaning that it maps into one dimension and does not use softmax.
+    and adds additional linear layer to solve text regression tasks.
     """
     def __init__(
-        self,
-        encoder: Union[LanguageModel, MultiEncoder],
-        num_classes: int = 1,
-        num_attn_heads: int = 1,
-        dropout: float = 0.1,
+            self,
+            encoder: Union[LanguageModel, MultiEncoder],
+            num_classes: int = 1,
     ):   
         super().__init__()
 
@@ -237,17 +233,16 @@ class TextRegressor(torch.nn.Module):
 
 class SequenceTagger(torch.nn.Module):
     """
-    Sequence Tagger Head for any sequence labeling tasks.
+    Sequence Tagger Head for sequence labeling tasks.
     This class uses representations from one (LanguageModel) or multiple language models (MultiEncoder)
     and adds prediction head (linear layer) to solve word level tasks.
-    Sequence tagger classifies each word to solve NER, POS and other word tagging tasks. 
     Thus, it uses representations of words instead of sentences.
     """
     def __init__(
-        self,
-        num_classes: int,
-        encoder: Union[LanguageModel, MultiEncoder],
-    ):   
+            self,
+            num_classes: int,
+            encoder: Union[LanguageModel, MultiEncoder],
+    ):
         super().__init__()
 
         self.encoder = encoder
