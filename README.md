@@ -102,7 +102,7 @@ trainer.train(learning_rate=2e-5,
               shuffle_data=True)
 ```
 
-- Electra base scores 67.7 ± 1.2 (Matthews correlation coefficient) for CoLA dev set. You can look at the scores provided by the authors here: [expected electra results](https://github.com/google-research/electra).
+- Electra base scores 67.8 ± 1.2 (Matthews correlation coefficient) for CoLA dev set. You can look at the scores provided by the authors here: [expected electra results](https://github.com/google-research/electra).
 - Roberta base scores 62.0 ± 1.3 [expected roberta results](https://github.com/pytorch/fairseq/tree/master/examples/roberta).
 - SpanBERT scores 57.2 ± 1.0
 - Large models need much smaller learning rates e.g. 5e-6
@@ -126,7 +126,7 @@ language_models = [
     LanguageModel('roberta-base'),
 ]
 
-# 3. create multi-encoder and choose the combine method: 'dme' or 'concat'
+# 3. create multi-encoder and choose the combine method: 'concat' or 'dme'
 multi_encoder = MultiEncoder(language_models=language_models,
                             combine_method='dme')
 
@@ -147,8 +147,8 @@ trainer.train(learning_rate=2e-5,
 
 - We can increase the score of Electra if we add Roberta and tune them together. The average (5 runs) Mcc score is 68.6.
 - Concatenation scores a bit better than DME `MultiEncoder(combine_method="concat")`. Expected difference is ↑ 0.1 compared to DME.
-- The increase in scores is still very minor. Most of the time it's in the range of standard deviation of Electra.
-- You can pick a more stable dataset where the difference between runs is much smaller (e.g. GLUE_STSB regression task has stdev of 0.2). Combining [Electra](https://huggingface.co/google/electra-base-generator) with [Ernie](nghuyong/ernie-2.0-en) scores 91.6 Spearman's rank (↑ 0.5).
+- The increase in scores is still very minor. Mostly it's in the range of standard deviation of Electra.
+- You can pick a more stable dataset where the difference between runs is much smaller (e.g. GLUE_STSB regression task has stdev of 0.2). Combining [Electra](https://huggingface.co/google/electra-base-generator) with [Ernie](nghuyong/ernie-2.0-en) on STS-B scores 91.6 Spearman's rank (↑ 0.5).
 
 ## Looking at attention weights
 
@@ -158,8 +158,8 @@ If you use DME as combine method, you can embedd a few sentences from CoLA dev s
 # pick a few sentences from CoLA dev set
 sentences = [
   "The government's imposition of a fine.",
-  "Jason happens to appear to seem to be sick.",
   "Somebody just left - guess who.",
+  "He can will go"
 ]
 
 # let's load the best model after training
@@ -167,7 +167,7 @@ model_path = "models/CoLA-multi-transformer-electra-base-discriminator" \
     "-roberta-base-classifier/best-model.pt"
 model = TextClassifier.from_checkpoint(model_path)
 
-# classify sentences and look at the attention scores of the multi-encoder
+# classify sentences and look at the dme scores of multi-encoder
 predictions = model.predict_tags(sentences, corpus.label_map)
 
 print(predictions)
@@ -187,12 +187,19 @@ print(predictions)
 
 ```
 
-DME scores show how much weight does the multi-encoder assign to each cls representation when embedding a given sentence. Electra is a stronger model than roberta but roberta also adds something to the meta-embedding. We might find sentences where roberta gets more weight than electra.
-
 ```python
-# if you did not save the model to file, you can predict with the best model directly from trainer
+# if you didn't save the model to file, you can predict with the best model directly from trainer
 predictions = trainer.best_model.predict_tags(sentences, corpus.label_map)
+
+# or skip the corpus.label_map if your dataset doesn't have one
+predictions = trainer.best_model.predict_tags(sentences)
+print(predictions)
 ```
+
+
+DME scores show how much weight does the multi-encoder assign to each cls representation when embedding a given sentence:
+- When predicting if sentence "He can will go" is linguistically correct, the model uses 0.66 of Electra and 0.34 or RoBERTa.
+- It's quite fun to inspect these scores. Especially if you train on multilingual corpora (i.e. sentences in different languages) and mix two monolingual models.
 
 ## Combining more than two models
 
@@ -217,7 +224,7 @@ This scored 69.3. I tried it only once so the score might differ after taking th
 ## Notes on joint tuning and why it sometimes doesn't work
 
 This approach is very sensitive to overfitting.
-- There are cases where one language model can fit the training data much faster than others. DME scores show that some language models can simply be ignored in the classifier layer. One option would be to play with hidden dropout parameters in LMs: `LanguageModel('roberta-base', hidden_dropout_prob=0.4)`.
+- There are cases where one language model can fit the training data much faster than others. DME scores show that newly added weights can learn to ignore some language models. One option would be to play with hidden dropout parameters in LMs: `LanguageModel('roberta-base', hidden_dropout_prob=0.4)`.
 - You can also attach different learning rates for each language model: `trainer.train(learning_rate=[3e-5, 1e-5])`
 - I am currently experimenting with larger learning rates just for linear decoder layer: `trainer.train(learning_rate=2e-5, decoder_learning_rate=1e-3)`. More examples are coming ✌️
 
