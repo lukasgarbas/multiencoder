@@ -11,8 +11,6 @@ My code is very much based on [FlairNLP](https://github.com/flairNLP/flair) (sho
 
 # Datasets
 
-A full list of integrated datasets. Most of them can be found in Flair. Maybe you'll find some new ones you didn't know about 🙂.
-
 <details>
   <summary>Datasets for experiments</summary>
 
@@ -69,7 +67,7 @@ A full list of integrated datasets. Most of them can be found in Flair. Maybe yo
 
 </details>
 
-Tasks: Text classification ✅, text regression ✅, sequence labeling (still working on SequenceTagger).
+Tasks: Text Classification ✅ Text Regression ✅ Sequence Labeling (still working on SequenceTagger).
 
 # Tuning a single Language Model
 
@@ -147,10 +145,10 @@ trainer.train(learning_rate=2e-5,
               shuffle_data=True)
 ```
 
-- We can increase the score of Electra if we add Roberta and tune them together. I ran it a few times and the average Mcc score is 68.6.
-- Concatenation scores a bit better than DME `MultiEncoder(combine_method="concat")`.
+- We can increase the score of Electra if we add Roberta and tune them together. The average (5 runs) Mcc score is 68.6.
+- Concatenation scores a bit better than DME `MultiEncoder(combine_method="concat")`. Expected difference is ↑ 0.1 compared to DME.
 - The increase in scores is still very minor. Most of the time it's in the range of standard deviation of Electra.
-- You can pick a more stable dataset where the difference between runs is much smaller (e.g. GLUE_STSB regression task has stdev of 0.2). Combining [Electra](https://huggingface.co/google/electra-base-generator) with [Ernie](nghuyong/ernie-2.0-en) scores 91.6 Sperman's rank (↑ 0.5).
+- You can pick a more stable dataset where the difference between runs is much smaller (e.g. GLUE_STSB regression task has stdev of 0.2). Combining [Electra](https://huggingface.co/google/electra-base-generator) with [Ernie](nghuyong/ernie-2.0-en) scores 91.6 Spearman's rank (↑ 0.5).
 
 ## Looking at attention weights
 
