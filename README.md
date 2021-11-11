@@ -198,7 +198,7 @@ print(predictions)
 
 
 DME scores show how much weight does the multi-encoder assign to each cls representation when embedding a given sentence:
-- When predicting if sentence "He can will go" is linguistically correct, the model uses 0.66 of Electra and 0.34 or RoBERTa.
+- When predicting if sentence "He can will go" is linguistically correct, the model uses 0.66 of Electra and 0.34 of RoBERTa.
 - It's quite fun to inspect these scores. Especially if you train on multilingual corpora (i.e. sentences in different languages) and mix two monolingual models.
 
 ## Combining more than two models
@@ -219,13 +219,15 @@ multi_encoder = MultiEncoder(
 )
 ```
 
-This scored 69.3. I tried it only once so the score might differ after taking the average of multiple runs. Combining a lot of language models suffers from overfitting and needs to be further analysed 🤷‍♂️.
+This scored 69.3. I tried it only once so the score might differ after taking the average of multiple runs. Combining a lot of language models suffers from overfitting and needs to be further analysed 🤷‍♂️
 
 ## Notes on joint tuning and why it sometimes doesn't work
 
 This approach is very sensitive to overfitting.
 - There are cases where one language model can fit the training data much faster than others. DME scores show that newly added weights can learn to ignore some language models. One option would be to play with hidden dropout parameters in LMs: `LanguageModel('roberta-base', hidden_dropout_prob=0.4)`.
-- You can also attach different learning rates for each language model: `trainer.train(learning_rate=[3e-5, 1e-5])`
-- I am currently experimenting with larger learning rates just for linear decoder layer: `trainer.train(learning_rate=2e-5, decoder_learning_rate=1e-3)`. More examples are coming ✌️
+- You can also attach different learning rates for each language model: `trainer.train(learning_rate=[3e-5, 1e-5])`.
+- I am currently experimenting with larger learning rates just for linear decoder layer: `trainer.train(learning_rate=2e-5, decoder_learning_rate=1e-3)`.
+
+Let me know if you find any interesting model combinations or hyper-parameter settings ✌️
 
 
