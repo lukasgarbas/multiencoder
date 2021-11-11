@@ -2,3 +2,4 @@ torch
 transformers
 sklearn
 scipy
+seqeval
