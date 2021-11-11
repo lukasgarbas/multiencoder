@@ -97,7 +97,7 @@ class EMOBANK(Corpus):
                                         task_type=task_type)
 
         super(EMOBANK, self).__init__(
-            name='EmoBank emotions according to Valence-Arousal-Dominance scheme',
+            name='EMOBANK emotions according to Valence-Arousal-Dominance scheme',
             task_type=task_type,
             train=train_set,
             dev=dev_set,

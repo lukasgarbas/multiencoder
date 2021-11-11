@@ -25,4 +25,3 @@ from .text_classification import CLICKBAIT
 from .text_classification import ISEAR
 from .text_classification import TREC
 from .text_classification import EMOTION_STIMULUS
-

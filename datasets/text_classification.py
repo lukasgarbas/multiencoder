@@ -56,7 +56,7 @@ class ISEAR(Corpus):
                     dev.append(isear_instance)
 
             train = [isear_instance for isear_instance in original_isear if isear_instance not in dev]
-            
+
             with open(data_folder / "train.tsv", mode="w") as train_file:
                 for instance in train:
                     train_file.write(f'{instance[0]}\t{instance[1]}\n')

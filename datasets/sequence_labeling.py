@@ -58,7 +58,7 @@ class CONLL_NER(Corpus):
                                       label_map=label_map)
 
         super(CONLL_NER, self).__init__(
-            name="CONLL 5-way Named Entity Recognition",
+            name="CONLL 4-way Named Entity Recognition",
             task_type=task_type,
             train=train_set,
             dev=dev_set,
@@ -74,7 +74,6 @@ class WNUT_NER(Corpus):
         base_path: str = "dataset_cache",
         evaluation_metric: Union[List[str], str] = "f1_score"
     ):
-
         if type(base_path) == str:
             base_path: Path = Path(base_path)
 
@@ -148,13 +147,13 @@ class WNUT_NER(Corpus):
             evaluation_metric=evaluation_metric
         )
 
+
 class MIT_MOVIE_NER(Corpus):
     def __init__(
         self,
         base_path: str = "dataset_cache",
         evaluation_metric: Union[List[str], str] = ["accuracy", "f1_score"]
     ):
-
         if type(base_path) == str:
             base_path: Path = Path(base_path)
 
@@ -215,7 +214,7 @@ class MIT_MOVIE_NER(Corpus):
                                       label_map=label_map)
 
         super(MIT_MOVIE_NER, self).__init__(
-            name="MIT MOVIE Named Entity Recognition ",
+            name="MIT MOVIE Named Entity Recognition",
             task_type=task_type,
             train=train_set,
             dev=dev_set,
@@ -229,7 +228,6 @@ class MIT_RESTAURANT_NER(Corpus):
         base_path: str = "dataset_cache",
         evaluation_metric: Union[List[str], str] = ["accuracy", "f1_score"]
     ):
-
         if type(base_path) == str:
             base_path: Path = Path(base_path)
 
@@ -286,7 +284,7 @@ class MIT_RESTAURANT_NER(Corpus):
                                       label_map=label_map)
 
         super(MIT_RESTAURANT_NER, self).__init__(
-            name="MIT RESTAURANT named entity recognition",
+            name="MIT RESTAURANT Named Entity Recognition",
             task_type=task_type,
             train=train_set,
             dev=dev_set,
